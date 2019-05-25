@@ -33,6 +33,14 @@ from jarabe.util.normalize import normalize_string
 
 
 class TitleBox(Gtk.Toolbar):
+    '''
+    Title box at the top of the pop-up window.
+    Title and close button are added to the box and as needed
+    more widgets can be added using self.add_widget method.
+    This box is optional as the inherited class can remove this 
+    block by setting the self._set_title_box to False.
+    '''
+
     def __init__(self):
         Gtk.Toolbar.__init__(self)
 
@@ -52,8 +60,15 @@ class TitleBox(Gtk.Toolbar):
         tool_item.show()
 
     def set_title(self, title):
+        '''
+        setter function for 'title' property.
+        Args:
+            title (str): title for pop-up window
+        '''
         self._label.set_markup('<b>%s</b>' % title)
         self._label.show()
+
+    title = GObject.Property(type=str, setter=set_title)
 
 
 _AUTOSEARCH_TIMEOUT = 1000
@@ -148,6 +163,17 @@ class ActivityChooser(Gtk.Window):
             self._row_activated_armed_path = None
 
         self.show()
+
+    def get_title_box(self):
+        '''
+        Getter method for title-box
+
+        Returns:
+            self._title_box (): Title or Tool Box
+        '''
+        return self._title_box
+
+    title_box = GObject.Property(type=str, getter=get_title_box)
 
     def __close_button_clicked_cb(self, button):
         self.destroy()
